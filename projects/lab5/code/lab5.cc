@@ -7,7 +7,7 @@
 #include <sstream>
 #include <GL/glew.h>
 #include <iostream>
-
+#include <fstream>
 
 using namespace Display;
 
@@ -20,7 +20,7 @@ namespace Example
 	{
 		// empty
 	}
-
+	
 	//------------------------------------------------------------------------------
 	/**
 	*/
@@ -39,7 +39,153 @@ namespace Example
 	//------------------------------------------------------------------------------
 	/**
 	*/
-	
+	bool ObjLoad(const char* filepath)
+	{
+		//std::vector<Vector4D> &file_verts;
+		//std::vector<Vector4D> &file_uvs;
+		//std::vector<Vector4D> &file_norms;
+
+		std::vector<unsigned int> vertexIndices, uvIndices, normIndices;
+		std::vector<Vector4D> t_verts;
+		std::vector<Vector4D> t_uvs;
+		std::vector<Vector4D> t_norms;
+
+		std::ifstream stream(filepath);
+		std::string line;
+
+		enum type
+		{
+			v, vt, vn, f, none
+		};
+		while (getline(stream,line))
+		{
+			std::string tmp;
+			std::stringstream ss(line);
+			std::vector<std::string> tokens;
+			while (getline(ss,tmp, ' '))
+			{
+				tokens.push_back(tmp);
+			}
+			if (tokens.empty())
+				continue;
+
+			type t = none;
+			if (tokens[0] == "v")
+				t = v;
+			else if (tokens[0] == "vt")
+				t = vt;
+			else if (tokens[0] == "vn")
+				t = vn;
+			else if (tokens[0] == "f")
+				t = f;
+
+			std::cout << tokens[0] << std::endl;
+			
+			switch (t)
+			{
+			case v:
+				{
+				float vert;
+
+					for (size_t i = 1; i < 4; i++)
+					{
+						sscanf_s(tokens[i].c_str(), "%f", &vert);
+						std::cout << vert << " ";
+					}
+					break;
+				}
+			case vt:
+				{
+				break;
+
+				}
+			case vn:
+				{
+				break;
+
+				}
+			case f:
+				{
+					unsigned int verts,uvs,norms;
+
+					for (size_t i = 1; i < 5; i++)
+					{
+						sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
+						std::cout << verts << "\t" << uvs << "\t" << norms << "\n";
+					}
+					break;
+				}
+			default:
+				break;
+			}
+			
+		}
+		
+
+
+		/*FILE * objfile = fopen(filepath,"r");
+		if (objfile == NULL) {
+			std::cout<<"FAILED TO LOAD OBJ FILE"<<std::endl;
+			return false;
+		}
+		*/
+		/*
+		char head[128];
+		while (true)
+		{
+			int reader = fscanf(objfile, "%s",head);
+			if (reader==EOF) //if reaidng END OF FILE, break
+				break;
+			
+			if (strcmp(header, "v") == 0){
+				Vector4D vert;
+				fscanf(objfile, "%f %f %f\n", &vert[0],&vert[1],&vert[2]); //3 floats and newline, insert into temp vertex
+				t_verts.push_back(vert);
+			}
+			else if (strcmp(header, "vt") == 0){
+				Vector4D uv;
+				fscanf(objfile, "%f %f\n", &uv[0], &uv[1]);
+				t_uvs.push_back(uv);
+			}
+			else if (strcmp(header, "vn") == 0){
+				Vector4D norm;
+				fscanf(objfile, "%f %f %f\n", &norm[0], &norm[1], &norm[2]);
+				t_norms.push_back(norm);
+			}
+			else if (strcmp(header, "f") == 0){
+				std::string vert1, vert2, vert3;
+				unsigned int vertex[3], uv[3], norm[3];
+				int match_nr = fscanf(objfile,
+				"%d/%d/%d %d/%d/%d %d/%d/%d\n",
+				&vertex[0], &uv[0], &norm[0],
+				&vertex[1], &uv[1], &norm[1],
+				&vertex[2], &uv[2], &norm[2]);
+
+				if (match_nr != 9){
+					//TRIANGULATE THAT SHIT LUDDE
+					int count = fscanf_s(objfile,
+					"%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n",)
+					return false;
+				}
+				
+				for (unsigned int i = 0; i < 3; i++)
+				{
+					vertexIndices.push_back(vertex[i]);
+					uvIndices.push_back(uv[i]);
+					normIndices.push_back(norm[i]);	
+				}
+			}
+			
+			for (unsigned int i = 0; i < vertexIndices.size(); i++)
+			{
+				unsigned int vertexIndex = vertexIndices[i];
+				Vector4D vertex = t_verts[vertexIndex-1];
+			}
+			
+		}
+		*/
+		return false;
+	}
 	bool
 	Lab5::Open()
 	{
@@ -120,7 +266,6 @@ namespace Example
 		if (this->window->Open())
 		{
 			glClearColor(0.1f, 0.1f, 0.4f, 1.0f);
-
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LESS);
 
@@ -135,6 +280,8 @@ namespace Example
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
 			cubenode = GraphicNode(mesh, tex, shad, tran, cam);
+			ObjLoad("../../test.txt");
+
 			return true;
 		}
 		

@@ -78,41 +78,76 @@ namespace Example
 				t = vn;
 			else if (tokens[0] == "f")
 				t = f;
-
-			std::cout << tokens[0] << std::endl;
+			else if (tokens[0] ==  "#")
+				continue;
+			
+			//std::cout << tokens[0] << std::endl;
 			
 			switch (t)
 			{
 			case v:
 				{
 				float vert;
+				std::cout << tokens[0] << std::endl;
 
-					for (size_t i = 1; i < 4; i++)
+					for (size_t i = 2; i < 5; i++)
 					{
 						sscanf_s(tokens[i].c_str(), "%f", &vert);
 						std::cout << vert << " ";
 					}
+					std::cout << "\n";
 					break;
 				}
 			case vt:
 				{
-				break;
-
+					float uv;
+					std::cout << tokens[0] << std::endl;
+					for (size_t i = 1; i < 3; i++)
+					{
+						sscanf_s(tokens[i].c_str(), "%f", &uv);
+						std::cout << uv << " ";
+					}
+					std::cout << "\n";
+					break;
 				}
 			case vn:
 				{
-				break;
+					float norm;
+					std::cout << tokens[0] << std::endl;
 
+					for (size_t i = 1; i < 4; i++)
+					{
+						sscanf_s(tokens[i].c_str(), "%f", &norm);
+						std::cout << norm << " ";
+					}
+					std::cout << "\n";
+					break;
 				}
 			case f:
-				{
-					unsigned int verts,uvs,norms;
+			{
+				unsigned int verts, uvs, norms;
+				std::cout << tokens[0] << std::endl;
 
+				if (tokens.size() == 4) //triangle
+				{
+					for (size_t i = 1; i < 4; i++)
+					{
+						sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
+						std::cout << verts << "\\" << uvs << "\\" << norms << "\\ ";
+					}
+					std::cout << "\n";
+				}
+				else if (tokens.size() == 5)
+				{
 					for (size_t i = 1; i < 5; i++)
 					{
 						sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
-						std::cout << verts << "\t" << uvs << "\t" << norms << "\n";
+						std::cout << verts << "\\" << uvs << "\\" << norms << "\\ ";
 					}
+					std::cout << "\n";
+				}
+				
+				
 					break;
 				}
 			default:
@@ -237,7 +272,7 @@ namespace Example
 			{
 				this->MousePos(xpos, ypos);
 				
-				std::cout << xpos << "  :  " << ypos << std::endl;
+				//std::cout << xpos << "  :  " << ypos << std::endl;
 				if (leftButtonPressed && dx < xpos)
 				{
 					cubenode.GetTransform()->RotY(0.01f);
@@ -280,7 +315,7 @@ namespace Example
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
 			cubenode = GraphicNode(mesh, tex, shad, tran, cam);
-			ObjLoad("../../test.txt");
+			ObjLoad("../../test.obj");
 
 			return true;
 		}

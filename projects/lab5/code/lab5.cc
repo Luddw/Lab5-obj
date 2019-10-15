@@ -45,7 +45,7 @@ namespace Example
 		//std::vector<Vector4D> &file_uvs;
 		//std::vector<Vector4D> &file_norms;
 
-		std::vector<unsigned int> vertexIndices, uvIndices, normIndices;
+		std::vector<GLuint> vertexIndices, uvIndices, normIndices;
 		std::vector<Vector4D> t_verts;
 		std::vector<Vector4D> t_uvs;
 		std::vector<Vector4D> t_norms;
@@ -87,64 +87,84 @@ namespace Example
 			{
 			case v:
 				{
-				float vert;
-				std::cout << tokens[0] << std::endl;
-
+					Vector4D vert;
 					for (size_t i = 2; i < 5; i++)
 					{
-						sscanf_s(tokens[i].c_str(), "%f", &vert);
-						std::cout << vert << " ";
+						sscanf_s(tokens[i].c_str(), "%f", &vert[i-1]);
+						std::cout << vert[i - 1] << " ";
 					}
 					std::cout << "\n";
+					t_verts.push_back(vert);
 					break;
 				}
 			case vt:
-				{
-					float uv;
-					std::cout << tokens[0] << std::endl;
+				{	
+					Vector4D uv;
 					for (size_t i = 1; i < 3; i++)
 					{
-						sscanf_s(tokens[i].c_str(), "%f", &uv);
-						std::cout << uv << " ";
+						sscanf_s(tokens[i].c_str(), "%f", &uv[i-1]);
+						std::cout << uv[i-1] << " ";
 					}
+					
 					std::cout << "\n";
+					t_uvs.push_back(uv);
 					break;
 				}
 			case vn:
 				{
-					float norm;
-					std::cout << tokens[0] << std::endl;
-
+					Vector4D norm;
 					for (size_t i = 1; i < 4; i++)
 					{
-						sscanf_s(tokens[i].c_str(), "%f", &norm);
-						std::cout << norm << " ";
+						sscanf_s(tokens[i].c_str(), "%f", &norm[i-1]);
+						std::cout << norm[i-1] << " ";
 					}
 					std::cout << "\n";
+					t_norms.push_back(norm);
 					break;
 				}
 			case f:
 			{
 				unsigned int verts, uvs, norms;
-				std::cout << tokens[0] << std::endl;
+				
 
 				if (tokens.size() == 4) //triangle
 				{
 					for (size_t i = 1; i < 4; i++)
 					{
-						sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
-						std::cout << verts << "\\" << uvs << "\\" << norms << "\\ ";
+						//sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
+						sscanf_s(tokens[i].c_str(), "%d/", &verts);
+						std::cout << verts << " ";
+						
+						vertexIndices.push_back(verts);
+						
 					}
 					std::cout << "\n";
+					
 				}
-				else if (tokens.size() == 5)
+				else if (tokens.size() == 5) //quad
 				{
+					std::vector<GLuint> tempquad;
 					for (size_t i = 1; i < 5; i++)
 					{
-						sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
-						std::cout << verts << "\\" << uvs << "\\" << norms << "\\ ";
+						sscanf_s(tokens[i].c_str(), "%d/", &verts);
+						
+						tempquad.push_back(verts);
 					}
-					std::cout << "\n";
+					vertexIndices.push_back(tempquad[0]);
+					std::cout << tempquad[0] << " ";
+					vertexIndices.push_back(tempquad[1]);
+					std::cout << tempquad[1] << " ";
+					vertexIndices.push_back(tempquad[3]);
+					std::cout << tempquad[3] << " \n";
+
+					vertexIndices.push_back(tempquad[2]);
+					std::cout << tempquad[2] << " ";
+					vertexIndices.push_back(tempquad[3]);
+					std::cout << tempquad[3] << " ";
+					vertexIndices.push_back(tempquad[1]);
+					std::cout << tempquad[1] << " \n";
+
+					
 				}
 				
 				
@@ -155,70 +175,13 @@ namespace Example
 			}
 			
 		}
-		
-
-
-		/*FILE * objfile = fopen(filepath,"r");
-		if (objfile == NULL) {
-			std::cout<<"FAILED TO LOAD OBJ FILE"<<std::endl;
-			return false;
-		}
-		*/
-		/*
-		char head[128];
-		while (true)
+		std::vector<Vertex> vertexbuff;
+		for (size_t i = 0; i <vertexIndices.size(); i++)
 		{
-			int reader = fscanf(objfile, "%s",head);
-			if (reader==EOF) //if reaidng END OF FILE, break
-				break;
-			
-			if (strcmp(header, "v") == 0){
-				Vector4D vert;
-				fscanf(objfile, "%f %f %f\n", &vert[0],&vert[1],&vert[2]); //3 floats and newline, insert into temp vertex
-				t_verts.push_back(vert);
-			}
-			else if (strcmp(header, "vt") == 0){
-				Vector4D uv;
-				fscanf(objfile, "%f %f\n", &uv[0], &uv[1]);
-				t_uvs.push_back(uv);
-			}
-			else if (strcmp(header, "vn") == 0){
-				Vector4D norm;
-				fscanf(objfile, "%f %f %f\n", &norm[0], &norm[1], &norm[2]);
-				t_norms.push_back(norm);
-			}
-			else if (strcmp(header, "f") == 0){
-				std::string vert1, vert2, vert3;
-				unsigned int vertex[3], uv[3], norm[3];
-				int match_nr = fscanf(objfile,
-				"%d/%d/%d %d/%d/%d %d/%d/%d\n",
-				&vertex[0], &uv[0], &norm[0],
-				&vertex[1], &uv[1], &norm[1],
-				&vertex[2], &uv[2], &norm[2]);
-
-				if (match_nr != 9){
-					//TRIANGULATE THAT SHIT LUDDE
-					int count = fscanf_s(objfile,
-					"%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n",)
-					return false;
-				}
-				
-				for (unsigned int i = 0; i < 3; i++)
-				{
-					vertexIndices.push_back(vertex[i]);
-					uvIndices.push_back(uv[i]);
-					normIndices.push_back(norm[i]);	
-				}
-			}
-			
-			for (unsigned int i = 0; i < vertexIndices.size(); i++)
-			{
-				unsigned int vertexIndex = vertexIndices[i];
-				Vector4D vertex = t_verts[vertexIndex-1];
-			}
-			
+			/// TO DO , create buffs and shit;
+			vertexbuff.push_back(Vertex(t_verts[i], t_uvs[i]));
 		}
-		*/
+		
 		return false;
 	}
 	bool

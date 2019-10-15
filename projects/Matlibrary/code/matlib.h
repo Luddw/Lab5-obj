@@ -16,6 +16,14 @@ public:
 		_vect_values[2] = 0;
 		_vect_values[3] = 1;
 	}
+	
+	Vector4D(const Vector4D &o)
+	{
+		_vect_values[0] = o[0];
+		_vect_values[1] = o[1];
+		_vect_values[2] = o[2];
+		_vect_values[3] = o[3];
+	}
 	float GetX() { return _vect_values[0]; }
 	float GetY() { return _vect_values[1]; }
 	float GetZ() { return _vect_values[2]; }
@@ -52,13 +60,7 @@ public:
 		this->_vect_values[3] = 0;
 	}
 
-	Vector4D(Vector4D& o)
-	{
-		this->_vect_values[0] = o._vect_values[0];
-		this->_vect_values[1] = o._vect_values[1];
-		this->_vect_values[2] = o._vect_values[2];
-		this->_vect_values[3] = o._vect_values[3];
-	}
+
 	/**
 	* Performs a dotproduction of two vectors
 	* @param vect4 : the 2nd vector used in the dotproduct

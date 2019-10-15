@@ -35,7 +35,7 @@ void MeshResource::SetupVertexBuffer(unsigned int size)
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    GLuint buffer_size = size * sizeof(Vertex);
+	const GLuint buffer_size = size * sizeof(Vertex);
 	glBufferData(GL_ARRAY_BUFFER, buffer_size, &verts[0].pos, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE, sizeof(Vertex), NULL);

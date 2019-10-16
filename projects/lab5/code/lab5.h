@@ -33,6 +33,7 @@ private:
 	float dx = 0;
 	float dy = 0;
 	GraphicNode cubenode;
+	
 	Display::Window* window;
 };
 } // namespace Example

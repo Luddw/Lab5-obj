@@ -1,5 +1,7 @@
 #include "meshresource.h"
 #include <utility>
+#include <fstream>
+#include <sstream>
 
 
 MeshResource::MeshResource(Vertex verts[], std::vector<GLuint> indices)
@@ -15,6 +17,7 @@ MeshResource::~MeshResource()
 	
 
 }
+
 
 MeshResource::MeshResource(): verts(nullptr)
 {
@@ -195,4 +198,173 @@ void MeshResource::DrawCube(float size)
 	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 	/*m.UnBindIbo();
 	m.UnBindVbo();*/
+}
+
+
+void MeshResource::ObjLoad(const char* filepath) const
+{
+	//std::vector<Vector4D> &file_verts;
+	//std::vector<Vector4D> &file_uvs;
+	//std::vector<Vector4D> &file_norms;
+
+	std::vector<GLuint> vertexIndices, uvIndices, normIndices;
+	std::vector<Vector4D> t_verts;
+	std::vector<Vector4D> t_uvs;
+	std::vector<Vector4D> t_norms;
+
+	std::ifstream stream(filepath);
+	std::string line;
+
+	enum type
+	{
+		v, vt, vn, f, none
+	};
+	while (getline(stream, line))
+	{
+		std::string tmp;
+		std::stringstream ss(line);
+		std::vector<std::string> tokens;
+		while (getline(ss, tmp, ' '))
+		{
+			tokens.push_back(tmp);
+		}
+		if (tokens.empty())
+			continue;
+
+		type t = none;
+		if (tokens[0] == "v")
+			t = v;
+		else if (tokens[0] == "vt")
+			t = vt;
+		else if (tokens[0] == "vn")
+			t = vn;
+		else if (tokens[0] == "f")
+			t = f;
+		else if (tokens[0] == "#")
+			continue;
+
+		//std::cout << tokens[0] << std::endl;
+
+		switch (t)
+		{
+		case v:
+		{
+			Vector4D vert;
+			for (size_t i = 1; i < 4; i++)
+			{
+				sscanf_s(tokens[i].c_str(), "%f", &vert[i - 1]);
+
+			}
+
+			t_verts.push_back(vert);
+			break;
+		}
+		case vt:
+		{
+			Vector4D uv;
+			for (size_t i = 1; i < 3; i++)
+			{
+				sscanf_s(tokens[i].c_str(), "%f", &uv[i - 1]);
+
+			}
+
+
+			t_uvs.push_back(uv);
+			break;
+		}
+		case vn:
+		{
+			Vector4D norm;
+			for (size_t i = 1; i < 4; i++)
+			{
+				sscanf_s(tokens[i].c_str(), "%f", &norm[i - 1]);
+
+			}
+
+			t_norms.push_back(norm);
+			break;
+		}
+		case f:
+		{
+			unsigned int verts, uvs, norms;
+
+
+			if (tokens.size() == 4) //triangle
+			{
+				for (size_t i = 1; i < 4; i++)
+				{
+					//sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
+					sscanf_s(tokens[i].c_str(), "%d/%d/%d ", &verts, &uvs, &norms);
+
+
+					vertexIndices.push_back(verts);
+					uvIndices.push_back(uvs);
+					normIndices.push_back(norms);
+				}
+
+
+			}
+			else if (tokens.size() == 5) //quad
+			{
+				std::vector<GLuint> tempverts, tempuvs, tempnorms;
+				for (size_t i = 1; i < 5; i++)
+				{
+					sscanf_s(tokens[i].c_str(), "%d/d%/d%", &verts, &uvs, &norms);
+
+
+					tempverts.push_back(verts);
+					tempuvs.push_back(uvs);
+					tempnorms.push_back(norms);
+				}
+				vertexIndices.push_back(tempverts[0]);
+				vertexIndices.push_back(tempverts[1]);
+				vertexIndices.push_back(tempverts[3]);
+				vertexIndices.push_back(tempverts[2]);
+				vertexIndices.push_back(tempverts[3]);
+				vertexIndices.push_back(tempverts[1]);
+
+				uvIndices.push_back(tempuvs[0]);
+				uvIndices.push_back(tempuvs[1]);
+				uvIndices.push_back(tempuvs[3]);
+				uvIndices.push_back(tempuvs[2]);
+				uvIndices.push_back(tempuvs[3]);
+				uvIndices.push_back(tempuvs[1]);
+
+				normIndices.push_back(tempnorms[0]);
+				normIndices.push_back(tempnorms[1]);
+				normIndices.push_back(tempnorms[3]);
+				normIndices.push_back(tempnorms[2]);
+				normIndices.push_back(tempnorms[3]);
+				normIndices.push_back(tempnorms[1]);
+
+			}
+
+
+			break;
+		}
+		default:
+			break;
+		}
+
+	}
+	std::vector<Vertex> buf;
+	for (size_t i = 0; i < vertexIndices.size(); i++)
+	{
+		unsigned int vertIndex = vertexIndices[i];
+		unsigned int uvIndex = uvIndices[i];
+		unsigned int normIndex = normIndices[i];
+
+		Vector4D vertex = t_verts[vertIndex - 1];
+		Vector4D uv = t_uvs[uvIndex - 1];
+		Vector4D norm = t_norms[normIndex - 1];
+		
+
+		buf.emplace_back(vertex, uv, norm);
+
+	}
+	glBufferData(GL_ARRAY_BUFFER, buf.size() * sizeof(Vertex), &buf[0].pos, GL_STATIC_DRAW);
+
+
+
+	// FIXA SKITEN FÖR ATT SKAPPA BUFFS N SHIT
 }

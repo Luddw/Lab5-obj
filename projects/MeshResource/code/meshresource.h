@@ -10,8 +10,11 @@ struct Vertex
 	Vertex() : pos(Vector4D()), uvPos(Vector4D()) { }
 	Vertex(Vertex& other) : pos(other.pos), uvPos(other.uvPos) { }
 	Vertex(Vector4D position, Vector4D uv) : pos(position), uvPos(uv) { }
+	Vertex(const Vector4D& position, const Vector4D& uv, const Vector4D& norm): pos(pos),uvPos(uv),normal(norm){};
 	Vector4D pos;
 	Vector4D uvPos;
+	Vector4D normal;
+
 };
 
 /** A class that represents a Mesh in OpenGL*/
@@ -31,7 +34,7 @@ public:
 	~MeshResource();
 	Vertex *verts;
 	std::vector<GLuint> indices;
-
+	std::vector<Vertex> vertexss;
 	/** method to bind the Vertex array object*/
 	void BindVao() const;
 	/** method to bind the Vertex buffer object*/
@@ -45,6 +48,7 @@ public:
 	void UnBindVao();
 
 	void DrawCube(float size);
+	void ObjLoad(const char* filepath) const;
 	/** 
 	* Generates buffers and binds them, Buffers the data to the gpu.
 	* Enables Vertex attributes, position and colour for each vertex.

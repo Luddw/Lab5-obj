@@ -7,10 +7,10 @@
 
 struct Vertex
 {
-	Vertex() : pos(Vector4D()), uvPos(Vector4D()) { }
-	Vertex(Vertex& other) : pos(other.pos), uvPos(other.uvPos) { }
-	Vertex(Vector4D position, Vector4D uv) : pos(position), uvPos(uv) { }
-	Vertex(const Vector4D& position, const Vector4D& uv, const Vector4D& norm): pos(pos),uvPos(uv),normal(norm){};
+	Vertex() : pos(Vector4D()), uvPos(Vector4D()) { };
+	Vertex(const Vertex& other) : pos(other.pos), uvPos(other.uvPos), normal(other.normal) { };
+	Vertex(Vector4D position, Vector4D uv) : pos(position), uvPos(uv) { };
+	Vertex(const Vector4D& position, const Vector4D& uv, const Vector4D& norm): pos(position),uvPos(uv),normal(norm){};
 	Vector4D pos;
 	Vector4D uvPos;
 	Vector4D normal;
@@ -46,16 +46,16 @@ public:
 	void UnBindIbo();
 	void UnBindVbo();
 	void UnBindVao();
-
+	void DrawMesh();
 	void DrawCube(float size);
-	void ObjLoad(const char* filepath) const;
+	void ObjLoad(const char* filepath);
 	/** 
 	* Generates buffers and binds them, Buffers the data to the gpu.
 	* Enables Vertex attributes, position and colour for each vertex.
 	*/
-	void SetupVertexBuffer(unsigned int size);
+	void SetupVertexBuffer();
 	/** Generates buffers and binds them, Buffers the data to the gpu. */
-	void SetupIndexBuffer(unsigned int size);
+	void SetupIndexBuffer();
 	/** Generates A vertex array, and binds it. */
 	void SetupVertexArray();
 	

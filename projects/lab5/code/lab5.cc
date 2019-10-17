@@ -128,11 +128,13 @@ namespace Example
 			
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
+			
 			const auto tex = std::make_shared<Texture>("../texture1.png");
 			const auto shad = std::make_shared<ShaderResource>("../shader.glsl");
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
 			cubenode = GraphicNode(mesh, tex, shad, tran, cam);
+			cubenode.GetMesh()->ObjLoad("../../test.obj");
 			//ObjLoad("../../test.obj");
 			
 			return true;

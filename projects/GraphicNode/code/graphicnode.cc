@@ -34,13 +34,13 @@ GraphicNode::GraphicNode(std::shared_ptr<MeshResource> mesh, std::shared_ptr<Tex
 
 void GraphicNode::Draw()
 {
-	p_Mesh->DrawCube(1);
+	p_Mesh->DrawMesh();
 	p_Texture->Bind(0);
 	p_Shader->Bind();
 	p_Shader->SetUniformMatrix4fv("m", p_Transform->MakeModel());
 	p_Shader->SetUniformMatrix4fv("vp", p_Cam->GetProj() * p_Cam->GetView());
 
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, p_Mesh->indices.size(), GL_UNSIGNED_INT, nullptr);
 
 	p_Mesh->UnBindIbo();
 	p_Mesh->UnBindVbo();

@@ -23,27 +23,32 @@ MeshResource::MeshResource(): verts(nullptr)
 {
 	this->verts = verts;
 	this->indices = indices;
+
+	
 }
 
-void MeshResource::SetupIndexBuffer(unsigned int size)
+void MeshResource::SetupIndexBuffer()
 {
     glGenBuffers(1, &ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-    const GLuint buffer_size = size *sizeof(GLuint);
+    const GLuint buffer_size = indices.size() *sizeof(GLuint);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,buffer_size, &indices[0], GL_STATIC_DRAW);
 }
 
-void MeshResource::SetupVertexBuffer(unsigned int size)
+void MeshResource::SetupVertexBuffer()
 {
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	const GLuint buffer_size = size * sizeof(Vertex);
-	glBufferData(GL_ARRAY_BUFFER, buffer_size, &verts[0].pos, GL_STATIC_DRAW);
+	const GLuint buffer_size = vertexss.size() * sizeof(Vertex);
+	glBufferData(GL_ARRAY_BUFFER, buffer_size, &vertexss[0], GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE, sizeof(Vertex), NULL);
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(Vertex), NULL);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1,4,GL_FLOAT,GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,uvPos));
+	glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,uvPos));
+	/*glEnableVertexAttribArray(2);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));*/
+
 
 }
 void MeshResource::SetupVertexArray()
@@ -71,6 +76,14 @@ void MeshResource::UnBindVao()
 	glBindVertexArray(0);
 }
 
+void MeshResource::DrawMesh()
+{
+	BindIbo();
+	BindVbo();
+	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+		//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+}
+
 void MeshResource::UnBindIbo()
 {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -83,92 +96,52 @@ void MeshResource::UnBindVbo()
 void MeshResource::DrawCube(float size) 
 {
 	size /= 2;
-	Vertex vertz[] = {
+	const std::vector<Vertex> vertz = {
+
+
 
 		
-
-
 		// Left
-		Vertex(Vector4D(-size, -size, -size),Vector4D(1.0f, 0.75f)),
-		Vertex(Vector4D(-size, -size, size), Vector4D(0.75f, 0.75f)),
-		Vertex(Vector4D(-size, size, size),  Vector4D(0.75f, 0.5f)),
-		Vertex(Vector4D(-size, size, -size),  Vector4D(1.0f, 0.5f)),
+		Vertex(Vector4D(-size, -size, -size),Vector4D(1.0f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, -size, size), Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, size, size),  Vector4D(0.75f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, size, -size),  Vector4D(1.0f, 0.5f),Vector4D(0,0,0)),
 		// Front
-		Vertex(Vector4D(-size,-size,size), Vector4D(0.25f, 0.75f)),
-		Vertex(Vector4D(size, -size, size),Vector4D(0.0f, 0.75f)),
-		Vertex(Vector4D(size, size, size), Vector4D(0.0f, 0.5f)),
-		Vertex(Vector4D(-size, size, size), Vector4D(0.25f, 0.5f)),
+		Vertex(Vector4D(-size,-size,size), Vector4D(0.25f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, -size, size),Vector4D(0.0f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, size, size), Vector4D(0.0f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, size, size), Vector4D(0.25f, 0.5f),Vector4D(0,0,0)),
 
 
 
 		// Back
-		Vertex(Vector4D(size, -size, -size), Vector4D(0.75f, 0.75f)),
-		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f)),
-		Vertex(Vector4D(-size, size, -size), Vector4D(0.5f, 0.5f)),
-		Vertex(Vector4D(size, size, -size),   Vector4D(0.75f, 0.5f)),
+		Vertex(Vector4D(size, -size, -size), Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, size, -size), Vector4D(0.5f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, size, -size),   Vector4D(0.75f, 0.5f),Vector4D(0,0,0)),
 
 
 
 		// Right
-		Vertex(Vector4D(size, -size, size),Vector4D(0.5f, 0.75f)),
-		Vertex(Vector4D(size, -size, -size),Vector4D(0.25f, 0.75f)),
-		Vertex(Vector4D(size, size, -size),Vector4D(0.25f, 0.5f)),
-		Vertex(Vector4D(size, size, size),  Vector4D(0.5f, 0.5f)),
+		Vertex(Vector4D(size, -size, size),Vector4D(0.5f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, -size, -size),Vector4D(0.25f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, size, -size),Vector4D(0.25f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, size, size),  Vector4D(0.5f, 0.5f),Vector4D(0,0,0)),
 
 		// Top
-		Vertex(Vector4D(-size, size, size), Vector4D(0.75f, 0.5f)),
-		Vertex(Vector4D(size, size, size),  Vector4D(0.5f, 0.5f)),
-		Vertex(Vector4D(size, size, -size), Vector4D(0.5f, 0.25f)),
-		Vertex(Vector4D(-size, size, -size), Vector4D(0.75f, 0.25f)),
+		Vertex(Vector4D(-size, size, size), Vector4D(0.75f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, size, size),  Vector4D(0.5f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, size, -size), Vector4D(0.5f, 0.25f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, size, -size), Vector4D(0.75f, 0.25f),Vector4D(0,0,0)),
 
 		// Bottom
-		Vertex(Vector4D(size, -size, size),  Vector4D(0.75f, 1.0f)),
-		Vertex(Vector4D(-size, -size, size), Vector4D(0.5f, 1.0f)),
-		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f)),
-		Vertex(Vector4D(size, -size, -size),  Vector4D(0.75f, 0.75f)),
+		Vertex(Vector4D(size, -size, size),  Vector4D(0.75f, 1.0f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, -size, size), Vector4D(0.5f, 1.0f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, -size, -size),  Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
+		};
 
-		//// Left
-		//Vertex(Vector4D(-size, -size, -size), Vector4D(0.75f, 0.25f)),
-		//Vertex(Vector4D(-size, -size, size), Vector4D(1.0f, 0.25f)),
-		//Vertex(Vector4D(-size, size, size), Vector4D(1.0f, 0.5f)),
-		//Vertex(Vector4D(-size, size, -size), Vector4D(0.75f, 0.5f)),
-		//// Front
-		//Vertex(Vector4D(-size,-size,size), Vector4D(0, 0.25f)),
-		//Vertex(Vector4D(size, -size, size), Vector4D(0.25f, 0.25f)),
-		//Vertex(Vector4D(size, size, size), Vector4D(0.25f, 0.5f)),
-		//Vertex(Vector4D(-size, size, size), Vector4D(0.0f, 0.5f)),
-
-
-
-		//// Back
-		//Vertex(Vector4D(size, -size, -size), Vector4D(0.5f, 0.25f)),
-		//Vertex(Vector4D(-size, -size, -size), Vector4D(0.75f, 0.25f)),
-		//Vertex(Vector4D(-size, size, -size), Vector4D(0.75f, 0.5f)),
-		//Vertex(Vector4D(size, size, -size), Vector4D(0.5f, 0.5f)),
-
-
-
-		//// Right
-		//Vertex(Vector4D(size, -size, size), Vector4D(0.25f, 0.25f)),
-		//Vertex(Vector4D(size, -size, -size), Vector4D(0.5f, 0.25f)),
-		//Vertex(Vector4D(size, size, -size), Vector4D(0.5f, 0.5f)),
-		//Vertex(Vector4D(size, size, size), Vector4D(0.25f, 0.5f)),
-
-		//// Top
-		//Vertex(Vector4D(-size, size, size), Vector4D(0.5f, 0.5f)),
-		//Vertex(Vector4D(size, size, size), Vector4D(0.75f, 0.5f)),
-		//Vertex(Vector4D(size, size, -size), Vector4D(0.75f, 0.75f)),
-		//Vertex(Vector4D(-size, size, -size), Vector4D(0.5f, 0.75f)),
-
-		//// Bottom
-		//Vertex(Vector4D(size, -size, size), Vector4D(0.5f, 0.0f)),
-		//Vertex(Vector4D(-size, -size, size), Vector4D(0.75f, 0.0f)),
-		//Vertex(Vector4D(-size, -size, -size), Vector4D(0.75f, 0.25f)),
-		//Vertex(Vector4D(size, -size, -size), Vector4D(0.5f, 0.25f)),
-		
-	};
-
-	const std::vector<GLuint> indices = {
+	const std::vector<GLuint> indice = {
 	0,1,3,		//triangle 1 //front
 	2,3,1,		//triagnle 2
 
@@ -191,17 +164,17 @@ void MeshResource::DrawCube(float size)
 
 	};
 
-	verts = vertz;
-	this->indices = indices;
-	SetupVertexBuffer(24);
-	SetupIndexBuffer(36);
-	//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+	vertexss = vertz;
+	this->indices = indice;
+	SetupVertexBuffer();
+	SetupIndexBuffer();
+	
 	/*m.UnBindIbo();
 	m.UnBindVbo();*/
 }
 
 
-void MeshResource::ObjLoad(const char* filepath) const
+void MeshResource::ObjLoad(const char* filepath)
 {
 	//std::vector<Vector4D> &file_verts;
 	//std::vector<Vector4D> &file_uvs;
@@ -348,6 +321,7 @@ void MeshResource::ObjLoad(const char* filepath) const
 
 	}
 	std::vector<Vertex> buf;
+	vertexss.clear();
 	for (size_t i = 0; i < vertexIndices.size(); i++)
 	{
 		unsigned int vertIndex = vertexIndices[i];
@@ -359,12 +333,10 @@ void MeshResource::ObjLoad(const char* filepath) const
 		Vector4D norm = t_norms[normIndex - 1];
 		
 
-		buf.emplace_back(vertex, uv, norm);
+		vertexss.emplace_back(Vertex(vertex, uv, norm));
 
 	}
-	glBufferData(GL_ARRAY_BUFFER, buf.size() * sizeof(Vertex), &buf[0].pos, GL_STATIC_DRAW);
-
-
-
-	// FIXA SKITEN FÖR ATT SKAPPA BUFFS N SHIT
+	std::cout << "OBJECT LOADED" <<std::endl;
+	
+	SetupVertexBuffer();
 }

@@ -2,7 +2,7 @@
 #include <utility>
 #include <fstream>
 #include <sstream>
-
+#include <map>
 
 MeshResource::MeshResource(Vertex verts[], std::vector<GLuint> indices)
 {
@@ -336,7 +336,9 @@ void MeshResource::ObjLoad(const char* filepath)
 		vertexss.emplace_back(Vertex(vertex, uv, norm));
 
 	}
-	std::cout << "OBJECT LOADED" <<std::endl;
-	
+	indices = vertexIndices;
 	SetupVertexBuffer();
+	SetupIndexBuffer();
+	std::cout << "OBJECT LOADED" <<std::endl;
+
 }

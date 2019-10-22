@@ -9,11 +9,12 @@
 	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
 static void GLClearError()
-MeshResource::MeshResource(std::vector<Vector4D> vertzz, std::vector<GLuint> indices)
 {
 	while (glGetError() != GL_NO_ERROR);
 
 }
+
+
 
 static bool GLLogCall(const char* function, const char* file, int line)
 {
@@ -350,21 +351,23 @@ void MeshResource::ObjLoad(const char* filepath)
 
 	for (size_t i = 0; i < vertexIndices.size(); i++)
 	{
-	
 		unsigned int vertIndex = vertexIndices[i];
 		unsigned int uvIndex = uvIndices[i];
 		unsigned int normIndex = normIndices[i];
 
+	
 		Vector4D vertex = t_verts[vertIndex - 1];
 		Vector4D uv = t_uvs[uvIndex - 1];
 		Vector4D norm = t_norms[normIndex - 1];
 		
-		vertexss.emplace_back(Vertex(vertex, uv,norm));
-		/*vertexss.emplace_back(Vertex(vertex, uv, norm));*/
+		vertexss.emplace_back(Vertex(vertex, uv, norm));
 		
-		
-
 	}
+
+	std::cout << vertexIndices.size() << std::endl;
+	std::cout << uvIndices.size() << std::endl;
+	std::cout << normIndices.size() << std::endl;
+
 	//indices = vertexIndices;
 	SetupVertexBuffer();
 	//SetupIndexBuffer();

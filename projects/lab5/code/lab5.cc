@@ -120,7 +120,6 @@ namespace Example
 		{
 			glClearColor(0.1f, 0.1f, 0.4f, 1.0f);
 			glEnable(GL_DEPTH_TEST);
-			glEnable(GL_CULL_FACE);
 			glDepthFunc(GL_LESS);
 
 			Matrix4D m;
@@ -129,7 +128,7 @@ namespace Example
 			
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
-			mesh->ObjLoad("../../suztri.obj");
+			mesh->ObjLoad("../../suz.obj");
 
 			const auto tex = std::make_shared<Texture>("../../resources/texture.png");
 			const auto shad = std::make_shared<ShaderResource>("../../resources/shader.glsl");
@@ -155,6 +154,7 @@ namespace Example
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			cubenode.Draw();
+
 			
 			this->window->Update();
 			this->window->SwapBuffers();

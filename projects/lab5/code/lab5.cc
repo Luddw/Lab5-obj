@@ -120,6 +120,7 @@ namespace Example
 		{
 			glClearColor(0.1f, 0.1f, 0.4f, 1.0f);
 			glEnable(GL_DEPTH_TEST);
+			glEnable(GL_CULL_FACE);
 			glDepthFunc(GL_LESS);
 
 			Matrix4D m;
@@ -128,15 +129,14 @@ namespace Example
 			
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
-			
-			const auto tex = std::make_shared<Texture>("../../resources/texture1.png");
+			mesh->ObjLoad("../../suztri.obj");
+
+			const auto tex = std::make_shared<Texture>("../../resources/texture.png");
 			const auto shad = std::make_shared<ShaderResource>("../../resources/shader.glsl");
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
-			cubenode = GraphicNode(mesh, tex, shad, tran, cam);
-			cubenode.GetMesh()->ObjLoad("../../test.obj");
-			//ObjLoad("../../test.obj");
 			
+			cubenode = GraphicNode(mesh, tex, shad, tran, cam);
 			return true;
 		}
 		

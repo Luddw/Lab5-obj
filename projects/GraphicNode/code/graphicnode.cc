@@ -1,15 +1,35 @@
 #include "graphicnode.h"
 
+#define ASSERT(x) if (!(x)) __debugbreak();
+#define GLCall(x) GLClearError();\
+	x;\
+	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
-//GraphicNode::GraphicNode(MeshResource mesh, Texture tex, ShaderResource shader, Transform trans, Cam cam)
-//{
-//	p_Mesh = std::make_shared<MeshResource>(mesh);
-//	p_Shader = std::make_shared<ShaderResource>(shader);
-//	p_Texture = std::make_shared<Texture>(tex);
-//	p_Transform = std::make_shared<Transform>(trans);
-//	p_Cam = std::make_shared<Cam>(cam);
-//	
-//}
+static void GLClearError()
+{
+	while (glGetError() != GL_NO_ERROR);
+}
+
+static bool GLLogCall(const char* function, const char* file, int line)
+{
+	while (GLenum error = glGetError())
+	{
+		std::cout << "[OpenGL Error] (" << error << ")" << function <<
+			" " << file << ":" << line << std::endl;
+		return false;
+	}
+	return true;
+}
+
+GraphicNode::GraphicNode(MeshResource mesh, Texture tex, ShaderResource shader, Transform trans, Cam cam)
+{
+	p_Mesh = std::make_shared<MeshResource>(mesh);
+	p_Shader = std::make_shared<ShaderResource>(shader);
+	p_Texture = std::make_shared<Texture>(tex);
+	p_Transform = std::make_shared<Transform>(trans);
+	p_Cam = std::make_shared<Cam>(cam);
+	
+}
 
 
 GraphicNode::GraphicNode() :
@@ -39,8 +59,7 @@ void GraphicNode::Draw()
 	p_Shader->Bind();
 	p_Shader->SetUniformMatrix4fv("m", p_Transform->MakeModel());
 	p_Shader->SetUniformMatrix4fv("vp", p_Cam->GetProj() * p_Cam->GetView());
-
-	glDrawElements(GL_TRIANGLES, p_Mesh->indices.size(), GL_UNSIGNED_INT, nullptr);
+	GLCall(glDrawElements(GL_TRIANGLES, p_Mesh->indices.size(), GL_UNSIGNED_INT, NULL));
 
 	p_Mesh->UnBindIbo();
 	p_Mesh->UnBindVbo();

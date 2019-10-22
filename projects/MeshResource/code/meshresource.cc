@@ -3,28 +3,48 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#define ASSERT(x) if (!(x)) __debugbreak();
+#define GLCall(x) GLClearError();\
+	x;\
+	ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
-MeshResource::MeshResource(Vertex verts[], std::vector<GLuint> indices)
+static void GLClearError()
 {
-    this->verts = verts;
-    this->indices = std::move(indices);
+	while (glGetError() != GL_NO_ERROR);
+}
+
+static bool GLLogCall(const char* function, const char* file, int line)
+{
+	while (GLenum error = glGetError())
+	{
+		std::cout << "[OpenGL Error] (" << error << ")" << function <<
+			" " << file << ":" << line << std::endl;
+		return false;
+	}
+	return true;
+}
+
+
+MeshResource::MeshResource(std::vector<Vertex> vertzz, std::vector<GLuint> indices)
+{
+	this->vertexss = std::move(vertzz);
+	this->indices = std::move(indices);
+
 }
 
 MeshResource::~MeshResource()
 {
-	glDeleteBuffers(1,&ibo);
-	glDeleteBuffers(1, &vbo);
+	GLCall(glDeleteBuffers(1,&ibo));
+	GLCall(glDeleteBuffers(1, &vbo));
 	
-
+	std::cout << " MESH DESTRUCTOR CALLED " << std::endl;
 }
 
 
-MeshResource::MeshResource(): verts(nullptr)
+MeshResource::MeshResource()
 {
-	this->verts = verts;
-	this->indices = indices;
-
-	
+	vert.clear();
+	indices.clear();
 }
 
 void MeshResource::SetupIndexBuffer()
@@ -37,18 +57,18 @@ void MeshResource::SetupIndexBuffer()
 
 void MeshResource::SetupVertexBuffer()
 {
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	GLCall(glGenBuffers(1, &vbo));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
 
-	const GLuint buffer_size = vertexss.size() * sizeof(Vertex);
-	glBufferData(GL_ARRAY_BUFFER, buffer_size, &vertexss[0], GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(Vertex), NULL);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,uvPos));
-	/*glEnableVertexAttribArray(2);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));*/
-
+	/*const GLuint buffer_size =;*/
+	GLCall(glBufferData(GL_ARRAY_BUFFER, vertexss.size() * sizeof(Vertex), &vertexss[0].pos, GL_STATIC_DRAW));
+	GLCall(glEnableVertexAttribArray(0));
+	GLCall(glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(Vertex), NULL));
+	GLCall(glEnableVertexAttribArray(1));
+	GLCall(glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uvPos)));
+	GLCall(glEnableVertexAttribArray(2));
+	GLCall(glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal)));
+		  
 
 }
 void MeshResource::SetupVertexArray()
@@ -69,7 +89,7 @@ void MeshResource::BindIbo() const
 }
 void MeshResource::BindVbo() const
 {
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
 }
 void MeshResource::UnBindVao()
 {
@@ -78,10 +98,11 @@ void MeshResource::UnBindVao()
 
 void MeshResource::DrawMesh()
 {
-	BindIbo();
 	BindVbo();
-	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
-		//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+
+	BindIbo();
+	//glDrawElements(GL_TRIANGLES, this->vertexss.size(),	GL_UNSIGNED_INT, NULL);
+	
 }
 
 void MeshResource::UnBindIbo()
@@ -199,7 +220,7 @@ void MeshResource::ObjLoad(const char* filepath)
 		std::vector<std::string> tokens;
 		while (getline(ss, tmp, ' '))
 		{
-			tokens.push_back(tmp);
+			tokens.emplace_back(tmp);
 		}
 		if (tokens.empty())
 			continue;
@@ -229,12 +250,12 @@ void MeshResource::ObjLoad(const char* filepath)
 
 			}
 
-			t_verts.push_back(vert);
+			t_verts.emplace_back(vert);
 			break;
 		}
 		case vt:
 		{
-			Vector4D uv;
+			Vector4D uv(0,0);
 			for (size_t i = 1; i < 3; i++)
 			{
 				sscanf_s(tokens[i].c_str(), "%f", &uv[i - 1]);
@@ -242,7 +263,7 @@ void MeshResource::ObjLoad(const char* filepath)
 			}
 
 
-			t_uvs.push_back(uv);
+			t_uvs.emplace_back(uv);
 			break;
 		}
 		case vn:
@@ -254,25 +275,25 @@ void MeshResource::ObjLoad(const char* filepath)
 
 			}
 
-			t_norms.push_back(norm);
+			t_norms.emplace_back(norm);
 			break;
 		}
 		case f:
 		{
-			unsigned int verts, uvs, norms;
+			unsigned int vert, uvs, norms;
 
 
 			if (tokens.size() == 4) //triangle
 			{
 				for (size_t i = 1; i < 4; i++)
 				{
-					//sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
-					sscanf_s(tokens[i].c_str(), "%d/%d/%d ", &verts, &uvs, &norms);
+					//sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts,  &uvs, &norms);
+					sscanf_s(tokens[i].c_str(), "%d/%d/%d", &vert, &uvs, &norms);
 
 
-					vertexIndices.push_back(verts);
-					uvIndices.push_back(uvs);
-					normIndices.push_back(norms);
+					vertexIndices.emplace_back(vert);
+					uvIndices.emplace_back(uvs);
+					normIndices.emplace_back(norms);
 				}
 
 
@@ -282,33 +303,33 @@ void MeshResource::ObjLoad(const char* filepath)
 				std::vector<GLuint> tempverts, tempuvs, tempnorms;
 				for (size_t i = 1; i < 5; i++)
 				{
-					sscanf_s(tokens[i].c_str(), "%d/d%/d%", &verts, &uvs, &norms);
+					sscanf_s(tokens[i].c_str(), "%d/%d/%d" , &vert, &uvs, &norms);
 
 
-					tempverts.push_back(verts);
-					tempuvs.push_back(uvs);
-					tempnorms.push_back(norms);
+					tempverts.emplace_back(vert);
+					tempuvs.emplace_back(uvs);
+					tempnorms.emplace_back(norms);
 				}
-				vertexIndices.push_back(tempverts[0]);
-				vertexIndices.push_back(tempverts[1]);
-				vertexIndices.push_back(tempverts[3]);
-				vertexIndices.push_back(tempverts[2]);
-				vertexIndices.push_back(tempverts[3]);
-				vertexIndices.push_back(tempverts[1]);
+				vertexIndices.emplace_back(tempverts[0]);
+				vertexIndices.emplace_back(tempverts[1]);
+				vertexIndices.emplace_back(tempverts[3]);
+				vertexIndices.emplace_back(tempverts[2]);
+				vertexIndices.emplace_back(tempverts[3]);
+				vertexIndices.emplace_back(tempverts[1]);
 
-				uvIndices.push_back(tempuvs[0]);
-				uvIndices.push_back(tempuvs[1]);
-				uvIndices.push_back(tempuvs[3]);
-				uvIndices.push_back(tempuvs[2]);
-				uvIndices.push_back(tempuvs[3]);
-				uvIndices.push_back(tempuvs[1]);
+				uvIndices.emplace_back(tempuvs[0]);
+				uvIndices.emplace_back(tempuvs[1]);
+				uvIndices.emplace_back(tempuvs[3]);
+				uvIndices.emplace_back(tempuvs[2]);
+				uvIndices.emplace_back(tempuvs[3]);
+				uvIndices.emplace_back(tempuvs[1]);
 
-				normIndices.push_back(tempnorms[0]);
-				normIndices.push_back(tempnorms[1]);
-				normIndices.push_back(tempnorms[3]);
-				normIndices.push_back(tempnorms[2]);
-				normIndices.push_back(tempnorms[3]);
-				normIndices.push_back(tempnorms[1]);
+				normIndices.emplace_back(tempnorms[0]);
+				normIndices.emplace_back(tempnorms[1]);
+				normIndices.emplace_back(tempnorms[3]);
+				normIndices.emplace_back(tempnorms[2]);
+				normIndices.emplace_back(tempnorms[3]);
+				normIndices.emplace_back(tempnorms[1]);
 
 			}
 
@@ -320,10 +341,14 @@ void MeshResource::ObjLoad(const char* filepath)
 		}
 
 	}
-	std::vector<Vertex> buf;
+	std::vector<Vector4D> buf;
 	vertexss.clear();
+	vert.clear();
+	indices.clear();
+
 	for (size_t i = 0; i < vertexIndices.size(); i++)
 	{
+	
 		unsigned int vertIndex = vertexIndices[i];
 		unsigned int uvIndex = uvIndices[i];
 		unsigned int normIndex = normIndices[i];
@@ -332,13 +357,15 @@ void MeshResource::ObjLoad(const char* filepath)
 		Vector4D uv = t_uvs[uvIndex - 1];
 		Vector4D norm = t_norms[normIndex - 1];
 		
-
-		vertexss.emplace_back(Vertex(vertex, uv, norm));
+		vertexss.emplace_back(Vertex(vertex, uv,norm));
+		/*vertexss.emplace_back(Vertex(vertex, uv, norm));*/
+		
+		
 
 	}
 	indices = vertexIndices;
 	SetupVertexBuffer();
 	SetupIndexBuffer();
-	std::cout << "OBJECT LOADED" <<std::endl;
+
 
 }

@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <vector>
 
+
 struct Vertex
 {
 	Vertex() : pos(Vector4D()), uvPos(Vector4D()) { };
@@ -27,14 +28,14 @@ public:
 	* @param indices: a vector containing GLuints for the setup of indexbuffer
 	*/
 	MeshResource();
+	MeshResource(std::vector<Vertex> vertzz, std::vector<GLuint> indices);
 
-	MeshResource(Vertex verts[], std::vector<GLuint> indices);
 	/** stores each vertices value for use in the mesh methods */
 	/** stores each indices value for use in the mesh methods */
 	~MeshResource();
-	Vertex *verts;
 	std::vector<GLuint> indices;
 	std::vector<Vertex> vertexss;
+	std::vector<Vector4D> vert;
 	/** method to bind the Vertex array object*/
 	void BindVao() const;
 	/** method to bind the Vertex buffer object*/

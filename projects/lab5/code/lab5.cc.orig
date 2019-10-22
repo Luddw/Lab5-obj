@@ -129,9 +129,15 @@ namespace Example
 			
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
+<<<<<<< HEAD
+			mesh->ObjLoad("../../suz.obj");
+
+			const auto tex = std::make_shared<Texture>("../../resources/texture1.png");
+=======
 			mesh->ObjLoad("../../suztri.obj");
 
 			const auto tex = std::make_shared<Texture>("../../resources/texture.png");
+>>>>>>> bc4da16ac2f83267b738a71dea5d947540d97d25
 			const auto shad = std::make_shared<ShaderResource>("../../resources/shader.glsl");
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));

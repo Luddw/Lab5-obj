@@ -28,7 +28,11 @@ public:
 	* @param indices: a vector containing GLuints for the setup of indexbuffer
 	*/
 	MeshResource();
+<<<<<<< HEAD
+	MeshResource(std::vector<Vector4D> vertzz, std::vector<GLuint> indices);
+=======
 	MeshResource(std::vector<Vertex> vertzz, std::vector<GLuint> indices);
+>>>>>>> bc4da16ac2f83267b738a71dea5d947540d97d25
 
 	/** stores each vertices value for use in the mesh methods */
 	/** stores each indices value for use in the mesh methods */

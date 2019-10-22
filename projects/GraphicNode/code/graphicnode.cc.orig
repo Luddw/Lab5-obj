@@ -59,7 +59,12 @@ void GraphicNode::Draw()
 	p_Shader->Bind();
 	p_Shader->SetUniformMatrix4fv("m", p_Transform->MakeModel());
 	p_Shader->SetUniformMatrix4fv("vp", p_Cam->GetProj() * p_Cam->GetView());
+<<<<<<< HEAD
+
+	glDrawElements(GL_TRIANGLES, p_Mesh->vert.size(), GL_UNSIGNED_INT, nullptr);
+=======
 	GLCall(glDrawElements(GL_TRIANGLES, p_Mesh->indices.size(), GL_UNSIGNED_INT, NULL));
+>>>>>>> bc4da16ac2f83267b738a71dea5d947540d97d25
 
 	//p_Mesh->UnBindIbo();
 	p_Mesh->UnBindVbo();

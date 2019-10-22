@@ -4,10 +4,12 @@
 #include <sstream>
 #include <map>
 
-MeshResource::MeshResource(Vertex verts[], std::vector<GLuint> indices)
+
+MeshResource::MeshResource(std::vector<Vector4D> vertzz, std::vector<GLuint> indices)
 {
-    this->verts = verts;
-    this->indices = std::move(indices);
+	this->vert = std::move(vertzz);
+	this->indices = std::move(indices);
+
 }
 
 MeshResource::~MeshResource()
@@ -19,12 +21,10 @@ MeshResource::~MeshResource()
 }
 
 
-MeshResource::MeshResource(): verts(nullptr)
+MeshResource::MeshResource()
 {
-	this->verts = verts;
-	this->indices = indices;
-
-	
+	vert.clear();
+	indices.clear();
 }
 
 void MeshResource::SetupIndexBuffer()
@@ -40,12 +40,12 @@ void MeshResource::SetupVertexBuffer()
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	const GLuint buffer_size = vertexss.size() * sizeof(Vertex);
-	glBufferData(GL_ARRAY_BUFFER, buffer_size, &vertexss[0], GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(Vertex), NULL);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,uvPos));
+	/*const GLuint buffer_size =;*/
+	glBufferData(GL_ARRAY_BUFFER, vert.size() * sizeof(Vector4D), &vert[0], GL_STATIC_DRAW);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE, sizeof(Vector4D), NULL);
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex,uvPos));
 	/*glEnableVertexAttribArray(2);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));*/
 
@@ -78,10 +78,10 @@ void MeshResource::UnBindVao()
 
 void MeshResource::DrawMesh()
 {
-	BindIbo();
+	//BindIbo();
 	BindVbo();
-	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
-		//glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+	glDrawElements(GL_TRIANGLES, this->vert.size(),	GL_UNSIGNED_INT, NULL);
+	
 }
 
 void MeshResource::UnBindIbo()
@@ -234,7 +234,7 @@ void MeshResource::ObjLoad(const char* filepath)
 		}
 		case vt:
 		{
-			Vector4D uv;
+			Vector4D uv(0,0);
 			for (size_t i = 1; i < 3; i++)
 			{
 				sscanf_s(tokens[i].c_str(), "%f", &uv[i - 1]);
@@ -259,18 +259,18 @@ void MeshResource::ObjLoad(const char* filepath)
 		}
 		case f:
 		{
-			unsigned int verts, uvs, norms;
+			unsigned int vert, uvs, norms;
 
 
 			if (tokens.size() == 4) //triangle
 			{
 				for (size_t i = 1; i < 4; i++)
 				{
-					//sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts, &uvs, &norms);
-					sscanf_s(tokens[i].c_str(), "%d/%d/%d ", &verts, &uvs, &norms);
+					//sscanf_s(tokens[i].c_str(), "%d/%d/%d", &verts,  &uvs, &norms);
+					sscanf_s(tokens[i].c_str(), "%d/%d/%d", &vert, &uvs, &norms);
 
 
-					vertexIndices.push_back(verts);
+					vertexIndices.push_back(vert);
 					uvIndices.push_back(uvs);
 					normIndices.push_back(norms);
 				}
@@ -282,10 +282,10 @@ void MeshResource::ObjLoad(const char* filepath)
 				std::vector<GLuint> tempverts, tempuvs, tempnorms;
 				for (size_t i = 1; i < 5; i++)
 				{
-					sscanf_s(tokens[i].c_str(), "%d/d%/d%", &verts, &uvs, &norms);
+					sscanf_s(tokens[i].c_str(), "%d/%d/%d", &vert, &uvs, &norms);
 
 
-					tempverts.push_back(verts);
+					tempverts.push_back(vert);
 					tempuvs.push_back(uvs);
 					tempnorms.push_back(norms);
 				}
@@ -320,8 +320,9 @@ void MeshResource::ObjLoad(const char* filepath)
 		}
 
 	}
-	std::vector<Vertex> buf;
+	std::vector<Vector4D> buf;
 	vertexss.clear();
+	vert.clear();
 	for (size_t i = 0; i < vertexIndices.size(); i++)
 	{
 		unsigned int vertIndex = vertexIndices[i];
@@ -332,13 +333,13 @@ void MeshResource::ObjLoad(const char* filepath)
 		Vector4D uv = t_uvs[uvIndex - 1];
 		Vector4D norm = t_norms[normIndex - 1];
 		
-
-		vertexss.emplace_back(Vertex(vertex, uv, norm));
+		vert.push_back(vertex);
+		/*vertexss.emplace_back(Vertex(vertex, uv, norm));*/
 
 	}
-	indices = vertexIndices;
+	//indices = vertexIndices;
 	SetupVertexBuffer();
-	SetupIndexBuffer();
-	std::cout << "OBJECT LOADED" <<std::endl;
+	//SetupIndexBuffer();
+
 
 }

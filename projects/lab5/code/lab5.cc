@@ -128,6 +128,7 @@ namespace Example
 			
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
+			//mesh->ObjLoad("../../suz.obj");
 			mesh->ObjLoad("../../suz.obj");
 
 			const auto tex = std::make_shared<Texture>("../../resources/texture.png");

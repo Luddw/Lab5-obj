@@ -361,7 +361,7 @@ void MeshResource::ObjLoad(const char* filepath)
 		Vector4D norm = t_norms[normIndex - 1];
 		
 		vertexss.emplace_back(Vertex(vertex, uv, norm));
-		
+		indices.emplace_back(i);
 	}
 
 	std::cout << vertexIndices.size() << std::endl;
@@ -370,7 +370,7 @@ void MeshResource::ObjLoad(const char* filepath)
 
 	//indices = vertexIndices;
 	SetupVertexBuffer();
-	//SetupIndexBuffer();
+	SetupIndexBuffer();
 
 
 }

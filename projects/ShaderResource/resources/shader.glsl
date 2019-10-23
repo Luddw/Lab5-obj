@@ -2,12 +2,12 @@
 #version 430
 layout(location=0) in vec3 pos;
 layout(location=1) in vec2 uv;
-layout(location=0) uniform mat4 mv;
-layout(location=1) uniform mat4 proj;
+layout(location=0) uniform mat4 m;
+layout(location=1) uniform mat4 vp;
 layout(location=1) out vec2 UV;
 void main()
 {
-	gl_Position = proj*mv*vec4(pos, 1);
+	gl_Position = vp*m*vec4(pos, 1);
 	UV = uv;
 };
 

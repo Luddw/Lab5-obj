@@ -32,7 +32,7 @@ private:
 	bool ismoving = false;
 	float dx = 0;
 	float dy = 0;
-	GraphicNode cubenode;
+	GraphicNode mainnode;
 	
 	Display::Window* window;
 };

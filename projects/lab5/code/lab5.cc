@@ -56,10 +56,12 @@ namespace Example
 				
 				switch (key)
 				{
-				case GLFW_KEY_D: {cubenode.GetTransform()->Move(-0.1f, 0, 0); break; }
-				case GLFW_KEY_A: {cubenode.GetTransform()->Move(0.1f, 0, 0); break; }
-				case GLFW_KEY_S: {cubenode.GetTransform()->Move(0, 0, 0.1f); break; }
-				case GLFW_KEY_W: {cubenode.GetTransform()->Move(0, 0, -0.1f); break; }
+				case GLFW_KEY_D: {mainnode.GetTransform()->Move(-0.1f, 0, 0); break; }
+				case GLFW_KEY_A: {mainnode.GetTransform()->Move(0.1f, 0, 0); break; }
+				case GLFW_KEY_S: {mainnode.GetTransform()->Move(0, 0, 0.1f); break; }
+				case GLFW_KEY_W: {mainnode.GetTransform()->Move(0, 0, -0.1f); break; }								 
+				case GLFW_KEY_M: {glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break; } //wireframe
+				case GLFW_KEY_N: {glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break; }
 				default: break;
 				}
 			}
@@ -93,19 +95,19 @@ namespace Example
 				//std::cout << xpos << "  :  " << ypos << std::endl;
 				if (leftButtonPressed && dx < xpos)
 				{
-					cubenode.GetTransform()->RotY(0.01f);
+					mainnode.GetTransform()->RotY(0.01f);
 				}
 				else if (leftButtonPressed && dx > xpos)
 				{
-					cubenode.GetTransform()->RotY(-0.01f);
+					mainnode.GetTransform()->RotY(-0.01f);
 				}
 				else if (leftButtonPressed && dy < ypos)
 				{
-					cubenode.GetTransform()->RotX(0.01f);
+					mainnode.GetTransform()->RotX(0.01f);
 				}
 				if (leftButtonPressed && dy > ypos)
 				{
-					cubenode.GetTransform()->RotX(-0.01f);
+					mainnode.GetTransform()->RotX(-0.01f);
 				}
 				dx = xpos;
 				dy = ypos;
@@ -128,15 +130,14 @@ namespace Example
 			
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
-			//mesh->ObjLoad("../../suz.obj");
-			mesh->ObjLoad("../../suz.obj");
-
-			const auto tex = std::make_shared<Texture>("../../resources/texture.png");
-			const auto shad = std::make_shared<ShaderResource>("../../resources/shader.glsl");
+			mesh->ObjLoad("./suz.obj");
+			const auto tex = std::make_shared<Texture>("./resources/texture.png");
+			const auto shad = std::make_shared<ShaderResource>("./resources/shader.glsl");
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
+			mainnode = GraphicNode(mesh, tex, shad, tran, cam);
+
 			
-			cubenode = GraphicNode(mesh, tex, shad, tran, cam);
 			return true;
 		}
 		
@@ -154,7 +155,7 @@ namespace Example
 		{
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			cubenode.Draw();
+			mainnode.Draw();
 
 			
 			this->window->Update();

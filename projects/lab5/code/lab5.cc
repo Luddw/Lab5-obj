@@ -8,7 +8,7 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <fstream>
-
+#include "pointlight.h"
 using namespace Display;
 
 namespace Example

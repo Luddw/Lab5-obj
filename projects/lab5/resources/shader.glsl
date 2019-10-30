@@ -20,4 +20,5 @@ void main()
 {
 	float mipmaplvl = 1.0f;
 	Color = texture2D(text,UV,mipmaplvl);
+	Color = vec4(0.5,0.6,1,1);
 };

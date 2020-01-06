@@ -1,32 +1,14 @@
 #pragma once
-
-class Vector4D;
-class Transform;
+#include "matlib.h"
 
 class PointLight 
 {
 public:
-	PointLight();
-	~PointLight();
-	
-	void SetColor(Vector4D color);
-	Transform GetTrans();
-	void SetIntensity();
+
+	PointLight(const Vector4D pos) : p(pos) {};
+
 private:
-	Vector4D color;
-	Transform trans;
-	float intensity;
-	MeshResource mesh;
+	Vector4D p;
+
 };
 
-inline void PointLight::SetColor(Vector4D color)
-{
-}
-
-inline Transform PointLight::GetTrans()
-{
-}
-
-inline void PointLight::SetIntensity()
-{
-}

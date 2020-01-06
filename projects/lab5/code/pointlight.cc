@@ -1,1 +1,3 @@
+#include "pointlight.h"
+
 

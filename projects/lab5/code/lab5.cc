@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include "pointlight.h"
+
 using namespace Display;
 
 namespace Example
@@ -130,13 +131,13 @@ namespace Example
 			
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
-			mesh->ObjLoad("./suz.obj");
+			mesh->ObjLoad("./yeaboi.obj");
 			const auto tex = std::make_shared<Texture>("./resources/texture.png");
 			const auto shad = std::make_shared<ShaderResource>("./resources/shader.glsl");
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
 			mainnode = GraphicNode(mesh, tex, shad, tran, cam);
-
+			
 			
 			return true;
 		}
@@ -151,6 +152,8 @@ namespace Example
 	void
 	Lab5::Run()
 	{
+		Vector4D l;
+		PointLight p(l);
 		while (this->window->IsOpen())
 		{
 

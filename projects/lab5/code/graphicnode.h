@@ -27,7 +27,7 @@ public:
 	void SetTransform(Transform& newtrans);
 
 	std::shared_ptr<MeshResource> GetMesh() const;
-	std::shared_ptr<ShaderResource> GetShader() const;
+	std::shared_ptr<ShaderResource> GetShader();
 	std::shared_ptr<Texture> GetTexture() const;
 	std::shared_ptr<Transform> GetTransform() const;
 };

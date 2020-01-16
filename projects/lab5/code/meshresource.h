@@ -50,7 +50,6 @@ public:
 	void DrawMesh();
 	void DrawCube(float size);
 	void ObjLoad(const char* filepath);
-	void VertexMapper();
 	/** 
 	* Generates buffers and binds them, Buffers the data to the gpu.
 	* Enables Vertex attributes, position and colour for each vertex.

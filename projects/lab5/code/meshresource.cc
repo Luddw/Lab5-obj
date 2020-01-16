@@ -46,8 +46,9 @@ MeshResource::~MeshResource()
 
 MeshResource::MeshResource()
 {
-	vert.clear();
-	indices.clear();
+	//vert.clear();
+	//indices.clear();
+	//vertexss.clear();
 }
 
 void MeshResource::SetupIndexBuffer()
@@ -120,13 +121,8 @@ void MeshResource::UnBindVbo()
 void MeshResource::DrawCube(float size) 
 {
 	size /= 2;
-	const std::vector<Vertex> vertz = {
 
-
-
-		
-		// Left
-		Vertex(Vector4D(-size, -size, -size),Vector4D(1.0f, 0.75f),Vector4D(0,0,0)),
+	vertexss = { Vertex(Vector4D(-size, -size, -size),Vector4D(1.0f, 0.75f),Vector4D(0,0,0)),
 		Vertex(Vector4D(-size, -size, size), Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
 		Vertex(Vector4D(-size, size, size),  Vector4D(0.75f, 0.5f),Vector4D(0,0,0)),
 		Vertex(Vector4D(-size, size, -size),  Vector4D(1.0f, 0.5f),Vector4D(0,0,0)),
@@ -163,9 +159,9 @@ void MeshResource::DrawCube(float size)
 		Vertex(Vector4D(-size, -size, size), Vector4D(0.5f, 1.0f),Vector4D(0,0,0)),
 		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f),Vector4D(0,0,0)),
 		Vertex(Vector4D(size, -size, -size),  Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
-		};
-
-	const std::vector<GLuint> indice = {
+	};
+	std::cout << "jjjjjj";
+	indices = {
 	0,1,3,		//triangle 1 //front
 	2,3,1,		//triagnle 2
 
@@ -188,8 +184,7 @@ void MeshResource::DrawCube(float size)
 
 	};
 
-	vertexss = vertz;
-	this->indices = indice;
+	
 	SetupVertexBuffer();
 	SetupIndexBuffer();
 	

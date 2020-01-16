@@ -1,14 +1,15 @@
 #pragma once
 #include "matlib.h"
+#include "graphicnode.h"
 
 class PointLight 
 {
 public:
-
-	PointLight(const Vector4D pos) : p(pos) {};
-
+	PointLight();
+	PointLight(Vector4D pos, Vector4D color, float intensity, float ambient);
 private:
-	Vector4D p;
-
+	Vector4D pos;
+	Vector4D color;
+	float ambient;
+	float intensity;
 };
-

@@ -94,7 +94,7 @@ std::shared_ptr<MeshResource> GraphicNode::GetMesh() const
 	return p_Mesh;
 }
 
-std::shared_ptr<ShaderResource> GraphicNode::GetShader() const
+std::shared_ptr<ShaderResource> GraphicNode::GetShader() 
 {
 	return p_Shader;
 }

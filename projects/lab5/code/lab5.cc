@@ -8,7 +8,6 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <fstream>
-#include "pointlight.h"
 
 using namespace Display;
 
@@ -124,19 +123,22 @@ namespace Example
 			glClearColor(0.1f, 0.1f, 0.4f, 1.0f);
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LESS);
-
 			Matrix4D m;
+			Matrix4D m123(1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 			Matrix4D rot;
 			Matrix4D rot2;
-			
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
-			mesh->ObjLoad("./yeaboi.obj");
+			mesh->ObjLoad("./suz.obj");
 			const auto tex = std::make_shared<Texture>("./resources/texture.png");
 			const auto shad = std::make_shared<ShaderResource>("./resources/shader.glsl");
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
+			
 			mainnode = GraphicNode(mesh, tex, shad, tran, cam);
+			
+			light = PointLight(Vector4D(-1, 0, -1), Vector4D(1, 1, 1, 1), 0.5, 0.5);
+
 			
 			
 			return true;
@@ -152,15 +154,12 @@ namespace Example
 	void
 	Lab5::Run()
 	{
-		Vector4D l;
-		PointLight p(l);
 		while (this->window->IsOpen())
 		{
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			mainnode.Draw();
-
-			
+		
 			this->window->Update();
 			this->window->SwapBuffers();
 		}

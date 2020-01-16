@@ -9,6 +9,7 @@
 #include "core/app.h"
 #include "render/window.h"
 #include "graphicnode.h"
+#include "pointlight.h"
 
 
 namespace Example
@@ -33,7 +34,7 @@ private:
 	float dx = 0;
 	float dy = 0;
 	GraphicNode mainnode;
-	
+	PointLight light;
 	Display::Window* window;
 };
 } // namespace Example

@@ -134,13 +134,12 @@ namespace Example
 			const auto shad = std::make_shared<ShaderResource>("./resources/shader.glsl");
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
-			
 			mainnode = GraphicNode(mesh, tex, shad, tran, cam);
-			
 			light = PointLight(Vector4D(-1, 0, -1), Vector4D(1, 1, 1, 1), 0.5, 0.5);
 
 			
-			
+			mainnode.SetLight(light);
+
 			return true;
 		}
 		

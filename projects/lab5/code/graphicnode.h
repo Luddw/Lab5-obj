@@ -14,7 +14,7 @@ private:
 	std::shared_ptr<ShaderResource> p_Shader;
 	std::shared_ptr<Transform> p_Transform;
 	std::shared_ptr<Cam> p_Cam;
-	static PointLight *lightsrc;
+	PointLight* lightsrc;
 public:
 	GraphicNode();
 	GraphicNode(MeshResource mesh, Texture tex, ShaderResource shader, Transform trans, Cam cam);
@@ -32,5 +32,5 @@ public:
 	std::shared_ptr<Texture> GetTexture() const;
 	std::shared_ptr<Transform> GetTransform() const;
 	
-	static void SetLight(PointLight light);
+	void SetLight(PointLight light);
 };

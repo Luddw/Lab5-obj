@@ -7,6 +7,10 @@ class PointLight
 public:
 	PointLight();
 	PointLight(Vector4D pos, Vector4D color, float intensity, float ambient);
+	Vector4D GetPos() const;
+	Vector4D GetColor() const;
+	float GetAmbient() const;
+	float GetIntensity() const;
 private:
 	Vector4D pos;
 	Vector4D color;

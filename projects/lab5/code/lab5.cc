@@ -155,10 +155,8 @@ namespace Example
 	{
 		while (this->window->IsOpen())
 		{
-
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			mainnode.Draw();
-		
 			this->window->Update();
 			this->window->SwapBuffers();
 		}

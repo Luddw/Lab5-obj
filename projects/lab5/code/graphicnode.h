@@ -5,7 +5,8 @@
 #include "transform.h"
 #include "cam.h"
 #include <memory>
-#include "pointlight.h"
+
+class PointLight;
 class GraphicNode
 {
 private:
@@ -32,5 +33,5 @@ public:
 	std::shared_ptr<Texture> GetTexture() const;
 	std::shared_ptr<Transform> GetTransform() const;
 	
-	void SetLight(PointLight light);
+	void SetLight(PointLight& light);
 };

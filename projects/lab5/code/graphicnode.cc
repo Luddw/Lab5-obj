@@ -1,5 +1,5 @@
 #include "graphicnode.h"
-
+#include "pointlight.h"
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError();\
 	x;\
@@ -113,7 +113,7 @@ std::shared_ptr<Transform> GraphicNode::GetTransform() const
 	return p_Transform;
 }
 
-void GraphicNode::SetLight(PointLight light)
+void GraphicNode::SetLight(PointLight &light)
 {
 	lightsrc = &light;
 }

@@ -30,5 +30,6 @@ public:
 	//uniforms
 	void SetUniform4f(const std::string &name, Vector4D vect);
 	void SetUniformMatrix4fv(const std::string& name, Matrix4D mat);
+	void SetUniformFloat(const std::string& name, float value);
 };
 

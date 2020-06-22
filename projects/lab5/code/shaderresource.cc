@@ -110,6 +110,11 @@ void ShaderResource::SetUniformMatrix4fv(const std::string& name, Matrix4D mat)
 	glUniformMatrix4fv(GetUniLocation(name), 1, GL_TRUE, &(mat)[0]);
 }
 
+void ShaderResource::SetUniformFloat(const std::string& name, float value)
+{
+	glUniform1f(GetUniLocation(name), value);
+}
+
 int ShaderResource::GetUniLocation(const std::string &name)
 {
 	if (uniformCache.find(name)!= uniformCache.end()) //checks if uniform already exists in cache

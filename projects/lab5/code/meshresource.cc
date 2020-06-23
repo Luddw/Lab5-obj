@@ -122,15 +122,18 @@ void MeshResource::DrawCube(float size)
 {
 	size /= 2;
 
-	vertexss = { Vertex(Vector4D(-size, -size, -size),Vector4D(1.0f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, -size, size), Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, size, size),  Vector4D(0.75f, 0.5f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, size, -size),  Vector4D(1.0f, 0.5f),Vector4D(0,0,0)),
+	vertexss = { 
+		// Top
+		Vertex(Vector4D(-size, -size, -size),	Vector4D(1.0f, 0.75f),Vector4D(0,0,-1)),
+		Vertex(Vector4D(-size, -size, size),   Vector4D(0.75f, 0.75f),Vector4D(0,0,-1)),
+		Vertex(Vector4D(-size, size, size),		Vector4D(0.75f, 0.5f),Vector4D(0,0,-1)),
+		Vertex(Vector4D(-size, size, -size),	 Vector4D(1.0f, 0.5f),Vector4D(0,0,-1)),
+
 		// Front
-		Vertex(Vector4D(-size,-size,size), Vector4D(0.25f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, -size, size),Vector4D(0.0f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, size, size), Vector4D(0.0f, 0.5f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, size, size), Vector4D(0.25f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size,-size,size),	  Vector4D(0.25f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, -size, size),	   Vector4D(0.0f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, size, size),	    Vector4D(0.0f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, size, size),	   Vector4D(0.25f, 0.5f),Vector4D(0,0,0)),
 
 
 

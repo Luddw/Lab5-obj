@@ -33,7 +33,7 @@ ShaderProgram ShaderResource::Parser(const std::string &path) const
 
 	while (getline(stream, line)) 
 	{
-		if (line.find("#shader") != std::string::npos) // finds "#shader <type of shader>" in file
+		if (line.find("#shader") != std::string::npos) // finds "#shader <<type of shader>>" in file
 		{
 			if (line.find("vertex") != std::string::npos) // mode set to vertex , found "#shader vertex"
 				type = ShaderType::VERTEX;
@@ -72,6 +72,8 @@ unsigned int ShaderResource::CompShader(const unsigned int type, const std::stri
 	}
 	return id;
 }
+
+
 
 unsigned int ShaderResource::CreateShader(const std::string & vert_shader, const std::string & frag_shader)
 {
@@ -112,7 +114,8 @@ void ShaderResource::SetUniformMatrix4fv(const std::string& name, Matrix4D mat)
 
 void ShaderResource::SetUniformFloat(const std::string& name, float value)
 {
-	glUniform1f(GetUniLocation(name), value);
+	glUniform1f(GetUniLocation(name), (GLfloat)value);
+	
 }
 
 int ShaderResource::GetUniLocation(const std::string &name)

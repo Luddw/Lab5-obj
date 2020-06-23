@@ -160,7 +160,6 @@ void MeshResource::DrawCube(float size)
 		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f),Vector4D(0,0,0)),
 		Vertex(Vector4D(size, -size, -size),  Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
 	};
-	std::cout << "jjjjjj";
 	indices = {
 	0,1,3,		//triangle 1 //front
 	2,3,1,		//triagnle 2

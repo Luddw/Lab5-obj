@@ -11,6 +11,7 @@ public:
 	Vector4D GetColor() const;
 	float GetAmbient() const;
 	float GetIntensity() const;
+	void Rotate(float value);
 private:
 	Vector4D pos;
 	Vector4D color;

@@ -61,7 +61,9 @@ void GraphicNode::Draw()
 	p_Shader->SetUniformMatrix4fv("vp", p_Cam->GetProj() * p_Cam->GetView());
 	p_Shader->SetUniform4f("lightcolor", lightsrc->GetColor());
 	p_Shader->SetUniform4f("lightpos", lightsrc->GetPos());
-	p_Shader->SetUniformFloat("intensity", lightsrc->GetIntensity());
+	p_Shader->SetUniform4f("intensity", Vector4D(lightsrc->GetIntensity(),0));
+
+
 
 	GLCall(glDrawElements(GL_TRIANGLES, p_Mesh->indices.size(), GL_UNSIGNED_INT, NULL));
 	/*glDrawArrays(GL_TRIANGLES, 0, p_Mesh->vertexss.size());*/

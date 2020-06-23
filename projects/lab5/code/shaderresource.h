@@ -18,6 +18,7 @@ private:
 	int GetUniLocation(const std::string &name);
 	unsigned int CreateShader(const std::string & vert_shader, const std::string & frag_shader);
 	unsigned int CompShader(unsigned int type, const std::string &source);
+
 	ShaderProgram Parser(const std::string &path) const;
 public:
 	ShaderResource(const std::string& file);

@@ -2,7 +2,8 @@
 
 PointLight::PointLight() {
 	
-
+	this->intensity = 1;
+	this->ambient = 1;
 }
 PointLight::PointLight(Vector4D pos, Vector4D color, float intensity, float ambient)
 {
@@ -32,3 +33,7 @@ float PointLight::GetIntensity() const
 	return intensity;
 }
 
+void PointLight::Rotate(float value) 
+{
+	pos * cos(value);
+}

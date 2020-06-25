@@ -123,45 +123,45 @@ void MeshResource::DrawCube(float size)
 	size /= 2;
 
 	vertexss = { 
-		// Top
-		Vertex(Vector4D(-size, -size, -size),	Vector4D(1.0f, 0.75f),Vector4D(0,0,-1)),
-		Vertex(Vector4D(-size, -size, size),   Vector4D(0.75f, 0.75f),Vector4D(0,0,-1)),
-		Vertex(Vector4D(-size, size, size),		Vector4D(0.75f, 0.5f),Vector4D(0,0,-1)),
-		Vertex(Vector4D(-size, size, -size),	 Vector4D(1.0f, 0.5f),Vector4D(0,0,-1)),
+		// Left
+		Vertex(Vector4D(-size, -size, -size),	Vector4D(1.0f, 0.75f),Vector4D(-1,0,0)),
+		Vertex(Vector4D(-size, -size, size),   Vector4D(0.75f, 0.75f),Vector4D(-1,0,0)),
+		Vertex(Vector4D(-size, size, size),		Vector4D(0.75f, 0.5f),Vector4D(-1,0,0)),
+		Vertex(Vector4D(-size, size, -size),	 Vector4D(1.0f, 0.5f),Vector4D(-1,0,0)),
 
 		// Front
-		Vertex(Vector4D(-size,-size,size),	  Vector4D(0.25f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, -size, size),	   Vector4D(0.0f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, size, size),	    Vector4D(0.0f, 0.5f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, size, size),	   Vector4D(0.25f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size,-size,size),	  Vector4D(0.25f, 0.75f),Vector4D(0,0,1)),
+		Vertex(Vector4D(size, -size, size),	   Vector4D(0.0f, 0.75f),Vector4D(0,0,1)),
+		Vertex(Vector4D(size, size, size),	    Vector4D(0.0f, 0.5f),Vector4D(0,0,1)),
+		Vertex(Vector4D(-size, size, size),	   Vector4D(0.25f, 0.5f),Vector4D(0,0,1)),
 
 
 
 		// Back
-		Vertex(Vector4D(size, -size, -size), Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, size, -size), Vector4D(0.5f, 0.5f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, size, -size),   Vector4D(0.75f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, -size, -size), Vector4D(0.75f, 0.75f),Vector4D(0,0,-1)),
+		Vertex(Vector4D(-size, -size, -size), Vector4D(0.5f, 0.75f),Vector4D(0,0,-1)),
+		Vertex(Vector4D(-size, size, -size),   Vector4D(0.5f, 0.5f),Vector4D(0,0,-1)),
+		Vertex(Vector4D(size, size, -size),   Vector4D(0.75f, 0.5f),Vector4D(0,0,-1)),
 
 
 
 		// Right
-		Vertex(Vector4D(size, -size, size),Vector4D(0.5f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, -size, -size),Vector4D(0.25f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, size, -size),Vector4D(0.25f, 0.5f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, size, size),  Vector4D(0.5f, 0.5f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, -size, size),Vector4D(0.5f, 0.75f),  Vector4D(1,0,0)),
+		Vertex(Vector4D(size, -size, -size),Vector4D(0.25f, 0.75f),Vector4D(1,0,0)),
+		Vertex(Vector4D(size, size, -size),Vector4D(0.25f, 0.5f),  Vector4D(1,0,0)),
+		Vertex(Vector4D(size, size, size),  Vector4D(0.5f, 0.5f),  Vector4D(1,0,0)),
 
 		// Top
-		Vertex(Vector4D(-size, size, size), Vector4D(0.75f, 0.5f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, size, size),  Vector4D(0.5f, 0.5f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, size, -size), Vector4D(0.5f, 0.25f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, size, -size), Vector4D(0.75f, 0.25f),Vector4D(0,0,0)),
+		Vertex(Vector4D(-size, size, size), Vector4D(0.75f, 0.5f),  Vector4D(0,1,0)),
+		Vertex(Vector4D(size, size, size),  Vector4D(0.5f, 0.5f),   Vector4D(0,1,0)),
+		Vertex(Vector4D(size, size, -size), Vector4D(0.5f, 0.25f),  Vector4D(0,1,0)),
+		Vertex(Vector4D(-size, size, -size), Vector4D(0.75f, 0.25f),Vector4D(0,1,0)),
 
 		// Bottom
-		Vertex(Vector4D(size, -size, size),  Vector4D(0.75f, 1.0f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, -size, size), Vector4D(0.5f, 1.0f),Vector4D(0,0,0)),
-		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f),Vector4D(0,0,0)),
-		Vertex(Vector4D(size, -size, -size),  Vector4D(0.75f, 0.75f),Vector4D(0,0,0)),
+		Vertex(Vector4D(size, -size, size),  Vector4D(0.75f, 1.0f),  Vector4D(0,-1,0)),
+		Vertex(Vector4D(-size, -size, size), Vector4D(0.5f, 1.0f),   Vector4D(0,-1,0)),
+		Vertex(Vector4D(-size, -size, -size),Vector4D(0.5f, 0.75f),  Vector4D(0,-1,0)),
+		Vertex(Vector4D(size, -size, -size),  Vector4D(0.75f, 0.75f),Vector4D(0,-1,0)),
 	};
 	indices = {
 	0,1,3,		//triangle 1 //front

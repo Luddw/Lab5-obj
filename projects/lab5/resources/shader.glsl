@@ -1,20 +1,20 @@
-#shader vertex 
+#shader vertex
 #version 430
 layout(location=0) in vec3 pos;
 layout(location=1) in vec2 uv;
+layout(location=2) in vec3 vert_normal;
 layout(location=0) uniform mat4 m;
 layout(location=1) uniform mat4 vp;
-layout(location=2) in vec3 normal;
 out vec3 fragment_pos;
 out vec3 fragment_norm;
 out vec2 UV;
 
 void main()
 {
-	vec3 fragment_pos = vec3(m * vec4(pos , 1.0)); // world space vertex
-	vec3 fragment_norm = inverse(transpose(mat3(m))) * normal; // worldspace normal 
+	fragment_pos = vec3(m * vec4(pos , 1.0)); // world space vertex
+	fragment_norm = inverse(transpose(mat3(m))) * vert_normal; // worldspace normal 
 	gl_Position = vp*m*vec4(pos, 1); //vertex pos
-
+	
 	UV = uv;
 };
 
@@ -32,7 +32,7 @@ void main()
 {
 	const float mipmaplvl = 1.0;
 	vec3 textur = texture2D(text,UV,mipmaplvl).xyz;
-	textur = vec3(0.6,0.1,0.1);
+	textur = vec3(1,1,1)*fragment_norm;
 	
 	//ambient
 	vec3 ambient = intensity.x*lightcolor.xyz;

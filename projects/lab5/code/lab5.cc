@@ -120,7 +120,7 @@ namespace Example
 
 		if (this->window->Open())
 		{
-			glClearColor(1, 0, 0, 1.0f);
+			glClearColor(0, 0, 0, 1.0f);
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LESS);
 			Matrix4D m;
@@ -129,7 +129,7 @@ namespace Example
 			Matrix4D rot2;
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
-			//mesh->ObjLoad("./suz.obj");
+			mesh->ObjLoad("./suzSmooth.obj");
 			//mesh->ObjLoad("./cube.obj");
 
 			const auto tex = std::make_shared<Texture>("./resources/texture.png");
@@ -137,8 +137,8 @@ namespace Example
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
 			mainnode = GraphicNode(mesh, tex, shad, tran, cam);
-			light = PointLight(Vector4D(0.5, 0.25, 0.5), Vector4D(1, 1, 1, 1), 1, 1);
-			mesh->DrawCube(0.5f);
+			light = PointLight(Vector4D(0.5, 0.1, 0.5), Vector4D(1, 1, 1, 1), 1, 1);
+			//mesh->DrawCube(0.5f);
 			//mesh->DrawCube(0.5);
 			
 			mainnode.SetLight(light);

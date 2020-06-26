@@ -46,7 +46,12 @@ Matrix4D Cam::GetView() const
 	return view;
 }
 
-Matrix4D Cam::GetProj()
+Vector4D Cam::GetPos() const
+{
+	return pos;
+}
+
+Matrix4D Cam::GetProj() const
 {
 	return perspective;
 }

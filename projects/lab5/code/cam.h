@@ -19,6 +19,8 @@ public:
     void Rot(float rad);
 
     Matrix4D GetView() const;
-	Matrix4D GetProj();
+	Matrix4D GetProj() const;
+	Vector4D GetPos() const;
+
 };
 

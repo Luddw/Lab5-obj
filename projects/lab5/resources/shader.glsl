@@ -25,6 +25,7 @@ uniform sampler2D text;
 uniform vec4 lightcolor;
 uniform vec4 lightpos; // the other objects color that is being lit by the lighting.
 uniform vec4 intensity;
+uniform vec4 camerapos;
 in vec3 fragment_pos;
 in vec3 fragment_norm;
 out vec4 Color;
@@ -32,7 +33,9 @@ void main()
 {
 	const float mipmaplvl = 1.0;
 	vec3 textur = texture2D(text,UV,mipmaplvl).xyz;
-	textur = vec3(0.5,0.5,1);
+	textur = vec3(0.1, 0.1, 0.1);
+
+
 	
 	//ambient
 	vec3 ambient = intensity.x*lightcolor.xyz;
@@ -45,9 +48,20 @@ void main()
 	vec3 lighting_direction = normalize(lightpos.xyz - fragment_pos);
 	float diffuse_intensity = max(dot(norm, lighting_direction), 0.0);
 	vec3 diffuse = diffuse_intensity * lightcolor.xyz;
+	
 
 
-	vec3 final = (ambient + diffuse) * textur;
+	//specular
+	float specular_intensity = 0.5;
+	vec3 view_direction = normalize(camerapos.xyz - fragment_pos);
+	vec3 reflection_direction = reflect(-lighting_direction, norm);
+	float specular_value = pow(max(dot(view_direction, reflection_direction), 0.0), 32); //higher exponent --> smaller highlights
+
+	
+	vec3 specular_final = specular_intensity * specular_value *  lightcolor.xyz;
+
+
+	vec3 final = (ambient + diffuse /*+  specular_final*/) * textur;
 	Color = vec4(final, 1.0);
 
 

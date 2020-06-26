@@ -137,7 +137,7 @@ namespace Example
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
 			mainnode = GraphicNode(mesh, tex, shad, tran, cam);
-			light = PointLight(Vector4D(0.5, 0.1, 0.5), Vector4D(1, 1, 1, 1), 1, 1);
+			light = PointLight(Vector4D(1, 0.1, 0.75), Vector4D(1, 1, 1, 1), 0.5, 0.5);
 			//mesh->DrawCube(0.5f);
 			//mesh->DrawCube(0.5);
 			

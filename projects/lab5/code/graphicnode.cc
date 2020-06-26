@@ -62,7 +62,7 @@ void GraphicNode::Draw()
 	p_Shader->SetUniform4f("lightcolor", lightsrc->GetColor());
 	p_Shader->SetUniform4f("lightpos", lightsrc->GetPos());
 	p_Shader->SetUniform4f("intensity", Vector4D(lightsrc->GetIntensity(),0));
-
+	p_Shader->SetUniform4f("camerapos", p_Cam->GetPos());
 
 
 	GLCall(glDrawElements(GL_TRIANGLES, p_Mesh->indices.size(), GL_UNSIGNED_INT, NULL));

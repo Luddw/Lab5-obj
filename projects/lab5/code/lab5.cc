@@ -62,6 +62,8 @@ namespace Example
 				case GLFW_KEY_W: {mainnode.GetTransform()->Move(0, 0, -0.1f); break; }								 
 				case GLFW_KEY_M: {glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); break; } //wireframe
 				case GLFW_KEY_N: {glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); break; }
+				case GLFW_KEY_H: {; break; }
+
 				default: break;
 				}
 			}
@@ -129,7 +131,7 @@ namespace Example
 			Matrix4D rot2;
 			Vector4D startcam(0, 0.8f, 2, 1);
 			const auto mesh = std::make_shared<MeshResource>();
-			mesh->ObjLoad("./suzSmooth.obj");
+			mesh->ObjLoad("./resources/suzSmooth.obj");
 			//mesh->ObjLoad("./cube.obj");
 
 			const auto tex = std::make_shared<Texture>("./resources/texture.png");
@@ -137,7 +139,7 @@ namespace Example
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
 			mainnode = GraphicNode(mesh, tex, shad, tran, cam);
-			light = PointLight(Vector4D(1, 0.1, 0.75), Vector4D(1, 1, 1, 1), 0.5, 0.5);
+			light = PointLight(Vector4D(1, 1, 0.25), Vector4D(1, 1, 1, 1), 0.5, 0.5);
 			//mesh->DrawCube(0.5f);
 			//mesh->DrawCube(0.5);
 			
@@ -156,12 +158,14 @@ namespace Example
 	void
 	Lab5::Run()
 	{
-
+		float rotlight = 0.05f;
 		while (this->window->IsOpen())
 		{
-			
+			light.Rotate(rotlight);
+			//rotlight += 0.05f;
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			mainnode.Draw();
+			std::cout << light.GetPos().GetX() << "\n";
 			this->window->Update();
 			this->window->SwapBuffers();
 		}

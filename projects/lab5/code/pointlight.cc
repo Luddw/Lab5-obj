@@ -35,5 +35,6 @@ float PointLight::GetIntensity() const
 
 void PointLight::Rotate(float value) 
 {
-	pos * cos(value);
+	pos = Matrix4D::RotY_axis(value) * pos;
+	
 }

@@ -61,7 +61,7 @@ void main()
 	vec3 specular_final = specular_intensity * specular_value *  lightcolor.xyz;
 
 
-	vec3 final = (ambient + diffuse /*+  specular_final*/) * textur;
+	vec3 final = (ambient + diffuse + specular_final) * textur;
 	Color = vec4(final, 1.0);
 
 

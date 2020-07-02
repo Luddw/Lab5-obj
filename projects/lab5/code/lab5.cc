@@ -133,13 +133,15 @@ namespace Example
 			const auto mesh = std::make_shared<MeshResource>();
 			mesh->ObjLoad("./resources/suzSmooth.obj");
 			//mesh->ObjLoad("./cube.obj");
+			//mesh->ObjLoad("./resources/floor.obj");
 
-			const auto tex = std::make_shared<Texture>("./resources/texture.png");
+			const auto tex = std::make_shared<Texture>("./resources/wood.jpg");
 			const auto shad = std::make_shared<ShaderResource>("./resources/shader.glsl");
 			const auto tran = std::make_shared<Transform>(m, m, m);
 			const auto cam = std::make_shared<Cam>(startcam, Vector4D(0, 0, 0, 1));
 			mainnode = GraphicNode(mesh, tex, shad, tran, cam);
-			light = PointLight(Vector4D(1, 1, 0.25), Vector4D(1, 1, 1, 1), 0.5, 0.5);
+			light = PointLight(Vector4D(1, 1, 0.25), Vector4D(1, 1, 1, 1), 0.3, 0.3);
+			
 			//mesh->DrawCube(0.5f);
 			//mesh->DrawCube(0.5);
 			
@@ -165,7 +167,7 @@ namespace Example
 			//rotlight += 0.05f;
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			mainnode.Draw();
-			std::cout << light.GetPos().GetX() << "\n";
+			//std::cout << light.GetPos().GetX() << "\n";
 			this->window->Update();
 			this->window->SwapBuffers();
 		}

@@ -51,14 +51,23 @@ void main()
 	
 
 
-	//specular
+	//specular  Phong
+//	float specular_intensity = 0.5;
+//	vec3 view_direction = normalize(camerapos.xyz - fragment_pos);
+//	vec3 reflection_direction = reflect(-lighting_direction, norm);
+//	float specular_value = pow(max(dot(view_direction, reflection_direction), 0.0), 32); //higher exponent --> smaller highlights
+
+
+
 	float specular_intensity = 0.5;
 	vec3 view_direction = normalize(camerapos.xyz - fragment_pos);
-	vec3 reflection_direction = reflect(-lighting_direction, norm);
-	float specular_value = pow(max(dot(view_direction, reflection_direction), 0.0), 32); //higher exponent --> smaller highlights
+
+	vec3 halfway_direction = normalize(lighting_direction + view_direction);
+
+	float specular_value = pow(max(dot(norm, halfway_direction), 0.0), 32); //higher exponent --> smaller highlights
 
 	
-	vec3 specular_final = specular_intensity * specular_value *  lightcolor.xyz;
+	vec3 specular_final =  specular_intensity*specular_value *  lightcolor.xyz;
 
 
 	vec3 final = (ambient + diffuse + specular_final) * textur;
